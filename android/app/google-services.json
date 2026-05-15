@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "558464539431",
+    "project_id": "benlag",
+    "storage_bucket": "benlag.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558464539431:android:a2af5fbdff6c094a0a2702",
+        "android_client_info": {
+          "package_name": "com.example.semana_5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBic7t5u1KdSzjaI23HNUJwOBXgto-cvIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
