@@ -1,36 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../services/api_service.dart';
+import '../services/auth_service.dart';
+import '../models/user_model.dart';
 
-enum AuthState { loading, success, error }
+enum AuthState { initial, loading, success, error }
 
 class AuthViewModel extends ChangeNotifier {
-  AuthState _state = AuthState.loading;
+  final AuthService _authService;
+
+  AuthState _state = AuthState.initial;
   AuthState get state => _state;
-  
+
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
 
-  // Credenciales hardcodeadas
-  final String validUser = '12345678';
-  final String validPass = '123456';
+  User? _user;
+  User? get user => _user;
 
-  void login(String user, String password) {
+  String? _token;
+  String? get token => _token;
+
+  AuthViewModel(ApiService apiService) : _authService = AuthService(apiService);
+
+  Future<void> login(String documento, String password) async {
     _state = AuthState.loading;
+    _errorMessage = '';
     notifyListeners();
 
-    // Simular delay
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (user == validUser && password == validPass) {
-        _state = AuthState.success;
-      } else {
-        _state = AuthState.error;
+    try {
+      final result = await _authService.login(documento, password);
+      _token = result['access_token'] as String;
+      _user = User.fromJson(result['cliente'] as Map<String, dynamic>);
+      _state = AuthState.success;
+    } on ApiException catch (e) {
+      if (e.isBlocked) {
+        _errorMessage = 'Usuario bloqueado por intentos fallidos';
+      } else if (e.isUnauthorized) {
         _errorMessage = 'Usuario o contraseña incorrectos';
+      } else {
+        _errorMessage = e.message;
       }
-      notifyListeners();
-    });
+      _state = AuthState.error;
+    } on http.ClientException catch (e) {
+      _errorMessage = 'No se puede conectar al servidor. Verifica que el backend esté corriendo en localhost:8003';
+      _state = AuthState.error;
+    } catch (e) {
+      _errorMessage = 'Error de conexión: ${e.toString()}';
+      _state = AuthState.error;
+    }
+
+    notifyListeners();
+  }
+
+  void logout() {
+    _authService.logout();
+    _token = null;
+    _user = null;
+    _state = AuthState.initial;
+    _errorMessage = '';
+    notifyListeners();
   }
 
   void resetState() {
-    _state = AuthState.loading;
+    _state = AuthState.initial;
+    _errorMessage = '';
     notifyListeners();
   }
 }

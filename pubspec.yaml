@@ -1,5 +1,5 @@
 name: app_clientes
-description: "A new Flutter project."
+description: "App Clientes - Crediscotia / Banco Andino"
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -9,9 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^2.27.0
-  cloud_firestore: ^4.15.8
-  firebase_database: ^10.4.9
+  http: ^1.2.1
   provider: ^6.1.1
 
 dev_dependencies:
@@ -23,4 +21,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-  
