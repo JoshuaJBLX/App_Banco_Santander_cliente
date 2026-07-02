@@ -11,7 +11,10 @@ import 'package:http/http.dart' as http;
 ///
 /// Mantiene el token JWT en memoria y lo adjunta como Bearer en cada request.
 class ApiService {
-  static const String baseUrl = 'http://localhost:8003';
+  static const String baseUrl = String.fromEnvironment(
+    'BASE_URL',
+    defaultValue: 'http://localhost:8003',
+  );
 
   String? _token;
 

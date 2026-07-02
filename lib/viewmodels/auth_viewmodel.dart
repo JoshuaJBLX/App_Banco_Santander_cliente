@@ -43,7 +43,7 @@ class AuthViewModel extends ChangeNotifier {
       }
       _state = AuthState.error;
     } on http.ClientException catch (e) {
-      _errorMessage = 'No se puede conectar al servidor. Verifica que el backend esté corriendo en localhost:8003';
+      _errorMessage = 'No se puede conectar al servidor. Verifica tu conexión e intenta de nuevo.';
       _state = AuthState.error;
     } catch (e) {
       _errorMessage = 'Error de conexión: ${e.toString()}';
